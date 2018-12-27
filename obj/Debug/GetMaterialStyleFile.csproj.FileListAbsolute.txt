@@ -10,3 +10,12 @@ C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\obj\Debug
 C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.exe
 C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.pdb
 C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.csprojAssemblyReference.cache
+C:\Users\John Zh\source\repos\GetMaterialStyleFile\bin\Debug\Url.json
+C:\Users\John Zh\source\repos\GetMaterialStyleFile\bin\Debug\GetMaterialStyleFile.exe.config
+C:\Users\John Zh\source\repos\GetMaterialStyleFile\bin\Debug\GetMaterialStyleFile.exe
+C:\Users\John Zh\source\repos\GetMaterialStyleFile\bin\Debug\GetMaterialStyleFile.pdb
+C:\Users\John Zh\source\repos\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.csprojAssemblyReference.cache
+C:\Users\John Zh\source\repos\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.csproj.CoreCompileInputs.cache
+C:\Users\John Zh\source\repos\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.csproj.CopyComplete
+C:\Users\John Zh\source\repos\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.exe
+C:\Users\John Zh\source\repos\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.pdb

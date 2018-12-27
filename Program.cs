@@ -17,18 +17,19 @@ namespace GetMaterialStyleFile
         private static string baseUrl = "http://razonartificial.com/themes/material-style/1.2.1/";
         static void Main(string[] args)
         {
-            GetAllHtmlFile(baseUrl);
+            
             //string materialStyleContent = File.ReadAllText(Path.Combine(basePath, "Url.json"));
-            //MaterialStyleContentFile materialStyleContentFile =
+            MaterialStyleContentFile materialStyleContentFile =GetAllFiles(baseUrl);
             //    JsonConvert.DeserializeObject<MaterialStyleContentFile>(materialStyleContent);
-            //GetHtmlFiles(materialStyleContentFile.Html);
-            //GetCssFiles(materialStyleContentFile.Css);
-            //GetJsFiles(materialStyleContentFile.Js);
+            
+            GetCssFiles(materialStyleContentFile.Css);
+            GetJsFiles(materialStyleContentFile.Js);
             //GetThemeFiles(materialStyleContentFile.ColorTheme, materialStyleContentFile.ColorWeight);
-            //GetImgFiles(materialStyleContentFile.Img);
+            GetImgFiles(materialStyleContentFile.Img);
+            GetHtmlFiles(materialStyleContentFile.Html);
         }
 
-        private static void GetAllHtmlFile(string url)
+        private static MaterialStyleContentFile GetAllFiles(string url)
         {
             //string materialStyleContent = File.ReadAllText(Path.Combine(basePath, "Url.json"));
             //MaterialStyleContentFile materialStyleContentFile =
@@ -103,32 +104,37 @@ namespace GetMaterialStyleFile
                 //    jObject.WriteTo(writer);
                 //}
                 File.WriteAllText(Path.Combine(basePath, "Url.json"), JsonConvert.SerializeObject(materialStyleContentFile));
+                return materialStyleContentFile;
             }
         }
         private static void GetHtmlFiles(List<string> htmlList)
         {
-            using (WebClient webClient = new WebClient())
-            {
+
                 htmlList.AsParallel().ForAll(obj =>
                 {
+                using (WebClient webClient = new WebClient())
+                {
                     webClient.DownloadFile(new Uri(baseUrl + obj), obj);
+                        Console.WriteLine(obj);
+                }
                 });
 
 
-            }
+            
         }
 
         private static void GetCssFiles(List<string> cssList)
         {
-            if (!Directory.Exists(basePath + "/css"))
+            if (!Directory.Exists(basePath + "/assets/css"))
             {
-                Directory.CreateDirectory(basePath + "/css");
+                Directory.CreateDirectory(basePath + "/assets/css");
             }
             cssList.AsParallel().ForAll(obj =>
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    webClient.DownloadFile(new Uri(baseUrl + obj), basePath + "/css/" + obj.Split('/')[obj.Split('/').Length - 1]);
+                    webClient.DownloadFile(new Uri(baseUrl + obj), basePath + "/assets/css/" + obj.Split('/')[obj.Split('/').Length - 1]);
+                    Console.WriteLine(obj);
                 }
             });
 
@@ -138,15 +144,16 @@ namespace GetMaterialStyleFile
 
         private static void GetJsFiles(List<string> jsList)
         {
-            if (!Directory.Exists(basePath + "/js"))
+            if (!Directory.Exists(basePath + "/assets/js"))
             {
-                Directory.CreateDirectory(basePath + "/js");
+                Directory.CreateDirectory(basePath + "/assets/js");
             }
             jsList.AsParallel().ForAll(obj =>
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    webClient.DownloadFile(new Uri(baseUrl + obj), basePath + "/js/" + obj.Split('/')[obj.Split('/').Length - 1]);
+                    webClient.DownloadFile(new Uri(baseUrl + obj), basePath + "/assets/js/" + obj.Split('/')[obj.Split('/').Length - 1]);
+                    Console.WriteLine(obj);
                 }
             });
 
@@ -155,16 +162,17 @@ namespace GetMaterialStyleFile
         }
         private static void GetImgFiles(List<string> imgList)
         {
-            if (!Directory.Exists(basePath + "/img"))
+            if (!Directory.Exists(basePath + "/assets/img"))
             {
-                Directory.CreateDirectory(basePath + "/img");
+                Directory.CreateDirectory(basePath + "/assets/img");
             }
             imgList.AsParallel().ForAll(obj =>
             {
                 using (WebClient webClient = new WebClient())
                 {
                     string fileName = obj.Split('/')[obj.Split('/').Length - 1];
-                    webClient.DownloadFile(new Uri(baseUrl + obj), fileName.Contains("?") ? basePath + "/img/" + fileName.Split('?')[0] : basePath + "/img/" + fileName);
+                    webClient.DownloadFile(new Uri(baseUrl + obj), fileName.Contains("?") ? basePath + "/assets/img/" + fileName.Split('?')[0] : basePath + "/assets/img/" + fileName);
+                    Console.WriteLine(obj);
                 }
             });
 
@@ -184,7 +192,7 @@ namespace GetMaterialStyleFile
                 {
                     using (WebClient webClient = new WebClient())
                     {
-                        webClient.DownloadFile(new Uri(baseUrl + "assets/css/style." + obj + "-" + w + ".min.css"), basePath + "/css/style." + obj + "-" + w + ".min.css");
+                        webClient.DownloadFile(new Uri(baseUrl + "assets/css/style." + obj + "-" + w + ".min.css"), basePath + "assets/css/style." + obj + "-" + w + ".min.css");
                     }
                 });
             });
