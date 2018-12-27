@@ -1,0 +1,12 @@
+C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\bin\Debug\Url.json
+C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\bin\Debug\GetMaterialStyleFile.exe.config
+C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\bin\Debug\GetMaterialStyleFile.exe
+C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\bin\Debug\GetMaterialStyleFile.pdb
+C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\bin\Debug\Newtonsoft.Json.dll
+C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\bin\Debug\Newtonsoft.Json.xml
+C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.csproj.CoreCompileInputs.cache
+C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.csproj.CopyComplete
+C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.exe
+C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.pdb
+C:\Users\E01851\source\repos\GetMaterialStyleFile\GetMaterialStyleFile\obj\Debug\GetMaterialStyleFile.csprojAssemblyReference.cache
