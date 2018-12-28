@@ -19,17 +19,19 @@ namespace GetMaterialStyleFile
         {
             
             //string materialStyleContent = File.ReadAllText(Path.Combine(basePath, "Url.json"));
-            MaterialStyleContentFile materialStyleContentFile =GetAllFiles(baseUrl);
+            GetHomePageFiles(baseUrl);
+            Console.ReadLine();
             //    JsonConvert.DeserializeObject<MaterialStyleContentFile>(materialStyleContent);
-            
-            GetCssFiles(materialStyleContentFile.Css);
-            GetJsFiles(materialStyleContentFile.Js);
-            //GetThemeFiles(materialStyleContentFile.ColorTheme, materialStyleContentFile.ColorWeight);
-            GetImgFiles(materialStyleContentFile.Img);
-            GetHtmlFiles(materialStyleContentFile.Html);
+
+
         }
 
-        private static MaterialStyleContentFile GetAllFiles(string url)
+        /// <summary>
+        /// 获取首页文件列表
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private static void GetHomePageFiles(string url)
         {
             //string materialStyleContent = File.ReadAllText(Path.Combine(basePath, "Url.json"));
             //MaterialStyleContentFile materialStyleContentFile =
@@ -50,13 +52,8 @@ namespace GetMaterialStyleFile
             //string mainHtmlContent= File.ReadAllText(Path.Combine(basePath, "index.html"));
             //var resultMatches = regex.Matches(mainHtmlContent);
 
-            MaterialStyleContentFile materialStyleContentFile = new MaterialStyleContentFile
-            {
-                Html = new List<string>(),
-                Css = new List<string>(),
-                Js = new List<string>(),
-                Img = new List<string>()
-            };
+            
+
             Regex regex = new Regex("(src=\"|href=\"([^#])).*?(\\\")");
             string mainHtmlContent = string.Empty;
 
@@ -65,58 +62,148 @@ namespace GetMaterialStyleFile
                 mainHtmlContent = webClient.DownloadString(url);
 
                 var resultMatches = regex.Matches(mainHtmlContent);
-                foreach (var match in resultMatches)
-                {
-                    if (!match.ToString().Contains("javascript") && match.ToString().Contains(".html"))
-                    {
-                        materialStyleContentFile.Html?.Add(match.ToString().Split('=')[1].Trim('"'));
-                    }
-
-                    if (match.ToString().Contains(".css"))
-                    {
-                        materialStyleContentFile.Css?.Add(match.ToString().Split('=')[1].Trim('"'));
-                    }
-
-                    if (match.ToString().Contains(".js"))
-                    {
-                        materialStyleContentFile.Js?.Add(match.ToString().Split('=')[1].Trim('"'));
-                    }
-                    if (match.ToString().Contains("/img/"))
-                    {
-                        materialStyleContentFile.Img?.Add(match.ToString().Split('=')[1].Trim('"'));
-                    }
-
-
-                }
-
-                materialStyleContentFile.Html = materialStyleContentFile.Html.Distinct().ToList();
-                materialStyleContentFile.Css = materialStyleContentFile.Css.Distinct().ToList();
-                materialStyleContentFile.Js = materialStyleContentFile.Js.Distinct().ToList();
-                materialStyleContentFile.Img = materialStyleContentFile.Img.Distinct().ToList();
-                if (File.Exists(Path.Combine(basePath, "Url.json")))
-                {
-                    File.Delete(Path.Combine(basePath, "Url.json"));
-                }
-                //using (StreamWriter file = File.CreateText(Path.Combine(basePath,"Url.json")))
-                //using (JsonTextWriter writer = new JsonTextWriter(file))
-                //{
-                //    JObject jObject = new JObject(materialStyleContentFile);
-                //    jObject.WriteTo(writer);
-                //}
-                File.WriteAllText(Path.Combine(basePath, "Url.json"), JsonConvert.SerializeObject(materialStyleContentFile));
-                return materialStyleContentFile;
+                MaterialStyleContentFile materialStyleContentFile = GetAllFilesList(resultMatches,"HomePageFileList.json");
+                GetAllFiles(materialStyleContentFile);
+                materialStyleContentFile.Html.RemoveAt(0);
+                GetChildPageFiles(materialStyleContentFile.Html);
             }
+        }
+
+        /// <summary>
+        /// 获取子页面文件列表
+        /// </summary>
+        /// <param name="childPageList"></param>
+        private static void GetChildPageFiles(List<string>childPageList)
+        {
+            if (childPageList.Count>0)
+            {
+                foreach (var childPage in childPageList)
+                {
+                    if (File.Exists(Path.Combine(basePath, childPage)))
+                    {
+                        Regex regex = new Regex("(src=\"|href=\"([^#])).*?(\\\")");
+                        using (WebClient webClient=new WebClient()) 
+                        {
+                           string pageContent= webClient.DownloadString(Path.Combine(baseUrl,childPage));
+                            var resultMatches = regex.Matches(pageContent);
+                            MaterialStyleContentFile materialStyleContentFile = GetAllFilesList(resultMatches,childPage.Split('.')[0]+".json");
+                            GetAllFiles(materialStyleContentFile);
+                        }
+                    }
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// 获取文件列表
+        /// </summary>
+        /// <param name="resultMatches"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        private static MaterialStyleContentFile GetAllFilesList(MatchCollection resultMatches,string fileName)
+        {
+            MaterialStyleContentFile materialStyleContentFile = new MaterialStyleContentFile
+            {
+                Html = new List<string>(),
+                Css = new List<string>(),
+                Js = new List<string>(),
+                Img = new List<string>()
+            };
+
+            foreach (var match in resultMatches)
+            {
+                if (!match.ToString().Contains("javascript") && match.ToString().Contains(".html"))
+                {
+                    materialStyleContentFile.Html?.Add(match.ToString().Split('=')[1].Trim('"'));
+                }
+
+                if (match.ToString().Contains(".css"))
+                {
+                    materialStyleContentFile.Css?.Add(match.ToString().Split('=')[1].Trim('"'));
+                }
+
+                if (match.ToString().Contains(".js"))
+                {
+                    materialStyleContentFile.Js?.Add(match.ToString().Split('=')[1].Trim('"'));
+                }
+                if (match.ToString().Contains("/img/"))
+                {
+                    materialStyleContentFile.Img?.Add(match.ToString().Split('=')[1].Trim('"'));
+                }
+
+
+            }
+
+            materialStyleContentFile.Html = materialStyleContentFile.Html.Distinct().ToList();
+            materialStyleContentFile.Css = materialStyleContentFile.Css.Distinct().ToList();
+            materialStyleContentFile.Js = materialStyleContentFile.Js.Distinct().ToList();
+            materialStyleContentFile.Img = materialStyleContentFile.Img.Distinct().ToList();
+            if (File.Exists(Path.Combine(basePath, fileName)))
+            {
+                File.Delete(Path.Combine(basePath, fileName));
+            }
+            //using (StreamWriter file = File.CreateText(Path.Combine(basePath,"Url.json")))
+            //using (JsonTextWriter writer = new JsonTextWriter(file))
+            //{
+            //    JObject jObject = new JObject(materialStyleContentFile);
+            //    jObject.WriteTo(writer);
+            //}
+            File.WriteAllText(Path.Combine(basePath, fileName), JsonConvert.SerializeObject(materialStyleContentFile));
+            return materialStyleContentFile;
+        }
+
+        private static void GetAllFiles(MaterialStyleContentFile materialStyleContentFile)
+        {
+            if (materialStyleContentFile.Css.Count > 0)
+            {
+                GetCssFiles(materialStyleContentFile.Css);
+
+            }
+
+            if (materialStyleContentFile.Js.Count > 0)
+            {
+                GetJsFiles(materialStyleContentFile.Js);
+
+            }
+
+            if (materialStyleContentFile.Img.Count > 0)
+            {
+                GetImgFiles(materialStyleContentFile.Img);
+
+            }
+
+            if (materialStyleContentFile.Html.Count > 0)
+            {
+                GetHtmlFiles(materialStyleContentFile.Html);
+
+            }
+            //GetThemeFiles(materialStyleContentFile.ColorTheme, materialStyleContentFile.ColorWeight);
         }
         private static void GetHtmlFiles(List<string> htmlList)
         {
 
                 htmlList.AsParallel().ForAll(obj =>
                 {
-                using (WebClient webClient = new WebClient())
-                {
-                    webClient.DownloadFile(new Uri(baseUrl + obj), obj);
-                        Console.WriteLine(obj);
-                }
+                    if (!File.Exists(basePath + "/" + obj))
+                    {
+                        using (WebClient webClient = new WebClient())
+                        {
+                            try
+                            {
+                                webClient.DownloadFile(new Uri(baseUrl + obj), obj);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                                //Console.WriteLine(obj)
+                                //throw;
+                            }
+
+                            Console.WriteLine(obj);
+                        }
+
+                    }
                 });
 
 
@@ -131,11 +218,15 @@ namespace GetMaterialStyleFile
             }
             cssList.AsParallel().ForAll(obj =>
             {
-                using (WebClient webClient = new WebClient())
+                if (!File.Exists(basePath + "/assets/css/" + obj.Split('/')[obj.Split('/').Length - 1]))
                 {
-                    webClient.DownloadFile(new Uri(baseUrl + obj), basePath + "/assets/css/" + obj.Split('/')[obj.Split('/').Length - 1]);
-                    Console.WriteLine(obj);
+                    using (WebClient webClient = new WebClient())
+                    {
+                        webClient.DownloadFile(new Uri(baseUrl + obj), basePath + "/assets/css/" + obj.Split('/')[obj.Split('/').Length - 1]);
+                        Console.WriteLine(obj);
+                    }
                 }
+
             });
 
 
@@ -150,11 +241,15 @@ namespace GetMaterialStyleFile
             }
             jsList.AsParallel().ForAll(obj =>
             {
-                using (WebClient webClient = new WebClient())
+                if(!File.Exists(basePath + "/assets/js/" + obj.Split('/')[obj.Split('/').Length - 1])&&!obj.Contains("100x100")&&!obj.Contains("64x64"))
                 {
-                    webClient.DownloadFile(new Uri(baseUrl + obj), basePath + "/assets/js/" + obj.Split('/')[obj.Split('/').Length - 1]);
-                    Console.WriteLine(obj);
+                    using (WebClient webClient = new WebClient())
+                    {
+                        webClient.DownloadFile(new Uri(baseUrl + obj), basePath + "/assets/js/" + obj.Split('/')[obj.Split('/').Length - 1]);
+                        Console.WriteLine(obj);
+                    }
                 }
+
             });
 
 
@@ -168,12 +263,30 @@ namespace GetMaterialStyleFile
             }
             imgList.AsParallel().ForAll(obj =>
             {
-                using (WebClient webClient = new WebClient())
+                string fileName = obj.Split('/')[obj.Split('/').Length - 1];
+                string finalFileName = fileName.Contains("?")
+                    ? basePath + "/assets/img/" + fileName.Split('?')[0]
+                    : basePath + "/assets/img/" + fileName;
+                if (!File.Exists(finalFileName))
                 {
-                    string fileName = obj.Split('/')[obj.Split('/').Length - 1];
-                    webClient.DownloadFile(new Uri(baseUrl + obj), fileName.Contains("?") ? basePath + "/assets/img/" + fileName.Split('?')[0] : basePath + "/assets/img/" + fileName);
-                    Console.WriteLine(obj);
+                    using (WebClient webClient = new WebClient())
+                    {
+
+                        try
+                        {
+                            webClient.DownloadFile(new Uri(baseUrl + obj),finalFileName);
+
+
+
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+                        Console.WriteLine(obj);
+                    }
                 }
+
             });
 
 
@@ -200,5 +313,7 @@ namespace GetMaterialStyleFile
 
 
         }
+
+     
     }
 }
