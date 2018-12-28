@@ -14,10 +14,11 @@ namespace GetMaterialStyleFile
     class Program
     {
         private static string basePath = AppDomain.CurrentDomain.BaseDirectory;
-        private static string baseUrl = "http://razonartificial.com/themes/material-style/1.2.1/";
+        //private static string baseUrl = "http://razonartificial.com/themes/material-style/1.2.1/";
+        private static string baseUrl= "https://agmstudio.io/themes/material-style/2.4.0/component-forms.html";
         static void Main(string[] args)
         {
-            
+
             //string materialStyleContent = File.ReadAllText(Path.Combine(basePath, "Url.json"));
             GetHomePageFiles(baseUrl);
             Console.WriteLine("Download finished!");
@@ -53,7 +54,7 @@ namespace GetMaterialStyleFile
             //string mainHtmlContent= File.ReadAllText(Path.Combine(basePath, "index.html"));
             //var resultMatches = regex.Matches(mainHtmlContent);
 
-            
+
 
             Regex regex = new Regex("(src=\"|href=\"([^#])).*?(\\\")");
             string mainHtmlContent = string.Empty;
@@ -83,7 +84,7 @@ namespace GetMaterialStyleFile
                     if (File.Exists(Path.Combine(basePath, childPage)))
                     {
                         Regex regex = new Regex("(src=\"|href=\"([^#])).*?(\\\")");
-                        using (WebClient webClient=new WebClient()) 
+                        using (WebClient webClient=new WebClient())
                         {
                            string pageContent= webClient.DownloadString(Path.Combine(baseUrl,childPage));
                             var resultMatches = regex.Matches(pageContent);
@@ -208,7 +209,7 @@ namespace GetMaterialStyleFile
                 });
 
 
-            
+
         }
 
         private static void GetCssFiles(List<string> cssList)
@@ -316,6 +317,6 @@ namespace GetMaterialStyleFile
 
         }
 
-     
+
     }
 }
