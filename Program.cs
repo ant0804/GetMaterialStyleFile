@@ -20,6 +20,7 @@ namespace GetMaterialStyleFile
             
             //string materialStyleContent = File.ReadAllText(Path.Combine(basePath, "Url.json"));
             GetHomePageFiles(baseUrl);
+            Console.WriteLine("Download finished!");
             Console.ReadLine();
             //    JsonConvert.DeserializeObject<MaterialStyleContentFile>(materialStyleContent);
 
@@ -257,16 +258,17 @@ namespace GetMaterialStyleFile
         }
         private static void GetImgFiles(List<string> imgList)
         {
-            if (!Directory.Exists(basePath + "/assets/img"))
-            {
-                Directory.CreateDirectory(basePath + "/assets/img");
-            }
+
             imgList.AsParallel().ForAll(obj =>
             {
+                if (!Directory.Exists(basePath + obj.Substring(0,obj.LastIndexOf('/'))))
+                {
+                    Directory.CreateDirectory(basePath + obj.Substring(0,obj.LastIndexOf('/')));
+                }
                 string fileName = obj.Split('/')[obj.Split('/').Length - 1];
                 string finalFileName = fileName.Contains("?")
-                    ? basePath + "/assets/img/" + fileName.Split('?')[0]
-                    : basePath + "/assets/img/" + fileName;
+                    ? basePath + obj.Substring(0,obj.LastIndexOf('/')+1) + fileName.Split('?')[0]
+                    : basePath + obj.Substring(0,obj.LastIndexOf('/')+1)+ fileName;
                 if (!File.Exists(finalFileName))
                 {
                     using (WebClient webClient = new WebClient())
