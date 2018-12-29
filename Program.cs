@@ -14,13 +14,23 @@ namespace GetMaterialStyleFile
     class Program
     {
         private static string basePath = AppDomain.CurrentDomain.BaseDirectory;
+        private static List<string>themeColorList=new List<string>
+        {
+            "red", "pink", "purple", "deep-purple", "indigo", "blue", "light-blue", "cyan", "teal", "green", "light-green", "lime", "yellow", "amber", "orange", "deep-orange", "brown", "grey", "blue-grey"
+        };
+
+        private static List<string>themColorWeightList=new List<string>
+        {
+            "300","400","500","600","700","800"
+        };
+
+        private List<string>exceptList=new List<string>();
         //private static string baseUrl = "http://razonartificial.com/themes/material-style/1.2.1/";
-        private static string baseUrl= "https://agmstudio.io/themes/material-style/2.4.0/component-forms.html";
+        private static string baseUrl= "https://agmstudio.io/themes/material-style/2.4.0/";
         static void Main(string[] args)
         {
-
-            //string materialStyleContent = File.ReadAllText(Path.Combine(basePath, "Url.json"));
-            GetHomePageFiles(baseUrl);
+            GetThemeFiles(themeColorList, themColorWeightList);
+            //GetHomePageFiles(baseUrl);
             Console.WriteLine("Download finished!");
             Console.ReadLine();
             //    JsonConvert.DeserializeObject<MaterialStyleContentFile>(materialStyleContent);
@@ -298,9 +308,9 @@ namespace GetMaterialStyleFile
 
         private static void GetThemeFiles(List<string> themeList, List<string> colorWeightList)
         {
-            if (!Directory.Exists(basePath + "/css"))
+            if (!Directory.Exists(basePath + "/assets/css"))
             {
-                Directory.CreateDirectory(basePath + "/css");
+                Directory.CreateDirectory(basePath + "/assets/css");
             }
             themeList.AsParallel().ForAll(obj =>
             {
@@ -308,7 +318,16 @@ namespace GetMaterialStyleFile
                 {
                     using (WebClient webClient = new WebClient())
                     {
-                        webClient.DownloadFile(new Uri(baseUrl + "assets/css/style." + obj + "-" + w + ".min.css"), basePath + "assets/css/style." + obj + "-" + w + ".min.css");
+                        try
+                        {
+                            webClient.DownloadFile(new Uri(baseUrl + "assets/css/style." + obj + "-" + w + ".min.css"), basePath + "assets/css/style." + obj + "-" + w + ".min.css");
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            
+                        }
+                        Console.WriteLine(obj);
                     }
                 });
             });
