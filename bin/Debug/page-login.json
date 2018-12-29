@@ -1,1 +1,23 @@
-{"html":["index.html"],"css":["assets/css/preload.min.css","assets/css/plugins.min.css","assets/css/style.light-blue-500.min.css","assets/css/width-boxed.min.css"],"js":["assets/js/html5shiv.min.js","assets/js/respond.min.js","assets/js/plugins.min.js","assets/js/app.min.js","assets/js/configurator.min.js"],"colorTheme":null,"colorWeight":null,"img":["assets/img/favicon.png?v"]}
+{
+  "html": [
+    "index.html"
+  ],
+  "css": [
+    "assets/css/preload.min.css",
+    "assets/css/plugins.min.css",
+    "assets/css/style.light-blue-500.min.css",
+    "assets/css/width-boxed.min.css"
+  ],
+  "js": [
+    "assets/js/html5shiv.min.js",
+    "assets/js/respond.min.js",
+    "assets/js/plugins.min.js",
+    "assets/js/app.min.js",
+    "assets/js/configurator.min.js"
+  ],
+  "colorTheme": null,
+  "colorWeight": null,
+  "img": [
+    "assets/img/favicon.png?v"
+  ]
+}

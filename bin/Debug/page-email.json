@@ -1,1 +1,14 @@
-{"html":[],"css":[],"js":[],"colorTheme":null,"colorWeight":null,"img":["assets/img/email/logo-white.png","assets/img/email/img1.jpg","assets/img/email/img2.jpg","assets/img/email/img3.jpg","assets/img/email/img4.jpg"]}
+{
+  "html": [],
+  "css": [],
+  "js": [],
+  "colorTheme": null,
+  "colorWeight": null,
+  "img": [
+    "assets/img/email/logo-white.png",
+    "assets/img/email/img1.jpg",
+    "assets/img/email/img2.jpg",
+    "assets/img/email/img3.jpg",
+    "assets/img/email/img4.jpg"
+  ]
+}

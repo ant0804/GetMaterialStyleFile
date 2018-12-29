@@ -29,11 +29,11 @@ namespace GetMaterialStyleFile
         private static string baseUrl= "https://agmstudio.io/themes/material-style/2.4.0/";
         static void Main(string[] args)
         {
-            GetThemeFiles(themeColorList, themColorWeightList);
-            //GetHomePageFiles(baseUrl);
+            
+            GetHomePageFiles(baseUrl);
+            //GetThemeFiles(themeColorList, themColorWeightList);
             Console.WriteLine("Download finished!");
             Console.ReadLine();
-            //    JsonConvert.DeserializeObject<MaterialStyleContentFile>(materialStyleContent);
 
 
         }
@@ -45,34 +45,12 @@ namespace GetMaterialStyleFile
         /// <returns></returns>
         private static void GetHomePageFiles(string url)
         {
-            //string materialStyleContent = File.ReadAllText(Path.Combine(basePath, "Url.json"));
-            //MaterialStyleContentFile materialStyleContentFile =
-            //    JsonConvert.DeserializeObject<MaterialStyleContentFile>(materialStyleContent);
-            //if (materialStyleContentFile == null)
-            //{
-            //    materialStyleContentFile=new MaterialStyleContentFile
-            //    {
-            //        Html = new List<string>(),
-            //        Css =new List<string>(),
-            //        Js = new List<string>(),
-            //        Img = new List<string>()
-            //    };
-            //}
-
-
-            //Regex regex =new Regex("(src=\"|href=\"([^#])).*?(\\\")");
-            //string mainHtmlContent= File.ReadAllText(Path.Combine(basePath, "index.html"));
-            //var resultMatches = regex.Matches(mainHtmlContent);
-
-
-
             Regex regex = new Regex("(src=\"|href=\"([^#])).*?(\\\")");
             string mainHtmlContent = string.Empty;
 
             using (WebClient webClient = new WebClient())
             {
                 mainHtmlContent = webClient.DownloadString(url);
-
                 var resultMatches = regex.Matches(mainHtmlContent);
                 MaterialStyleContentFile materialStyleContentFile = GetAllFilesList(resultMatches,"HomePageFileList.json");
                 GetAllFiles(materialStyleContentFile);
@@ -161,7 +139,8 @@ namespace GetMaterialStyleFile
             //    JObject jObject = new JObject(materialStyleContentFile);
             //    jObject.WriteTo(writer);
             //}
-            File.WriteAllText(Path.Combine(basePath, fileName), JsonConvert.SerializeObject(materialStyleContentFile));
+            
+            File.WriteAllText(Path.Combine(basePath, fileName), JValue.Parse(JsonConvert.SerializeObject(materialStyleContentFile)).ToString(Formatting.Indented));
             return materialStyleContentFile;
         }
 
@@ -208,8 +187,6 @@ namespace GetMaterialStyleFile
                             catch (Exception e)
                             {
                                 Console.WriteLine(e);
-                                //Console.WriteLine(obj)
-                                //throw;
                             }
 
                             Console.WriteLine(obj);
@@ -288,9 +265,6 @@ namespace GetMaterialStyleFile
                         try
                         {
                             webClient.DownloadFile(new Uri(baseUrl + obj),finalFileName);
-
-
-
                         }
                         catch (Exception e)
                         {
@@ -327,7 +301,7 @@ namespace GetMaterialStyleFile
                             Console.WriteLine(e);
                             
                         }
-                        Console.WriteLine(obj);
+                        Console.WriteLine(obj+"-"+w);
                     }
                 });
             });
